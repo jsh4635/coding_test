@@ -6,16 +6,16 @@ class Solution {
         int[] su1 = {1, 2, 3, 4, 5};
         int[] su2 = {2, 1, 2, 3, 2, 4, 2, 5};
         int[] su3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
-        int[] checks = new int[3];
+        Map<Integer, Integer> map = new HashMap<>();
         for(int i = 0; i < answers.length; i++){
-            if(answers[i] == su1[i % su1.length]) checks[0]++;
-            if(answers[i] == su2[i % su2.length]) checks[1]++;
-            if(answers[i] == su3[i % su3.length]) checks[2]++;
+            if(answers[i] == su1[i % su1.length]) map.put(1, map.getOrDefault(1, 0) + 1);
+            if(answers[i] == su2[i % su2.length]) map.put(2, map.getOrDefault(2, 0) + 1);
+            if(answers[i] == su3[i % su3.length]) map.put(3, map.getOrDefault(3, 0) + 1);
         }
-        int max = Math.max(checks[0], Math.max(checks[1], checks[2]));
+        int max = Collections.max(map.values());
         
-        for(int i = 0; i < checks.length; i++){
-            if(max == checks[i]) list.add(i + 1);
+        for(Integer i : map.keySet()){
+            if(max == map.get(i)) list.add(i);
         }
         
         return list.stream().mapToInt(Integer::intValue).toArray();
