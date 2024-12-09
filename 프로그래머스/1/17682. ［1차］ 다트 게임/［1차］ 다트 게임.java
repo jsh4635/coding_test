@@ -9,29 +9,19 @@ class Solution {
         
         List<Integer> list = new ArrayList<>();
         
-        String value = "";
-        
         for(int i = 0; i < sArr.length; i++){
-            if(sArr[i].matches("[0-9]")) value += sArr[i];
-            if(sArr[i].equals("S")) {
-                list.add(Integer.parseInt(value));
-                value = "";
-            }
+            if(sArr[i].matches("[0-9]")) list.add(Integer.parseInt(sArr[i]));
+            else if(sArr[i].equals("S")) continue;
             else if(sArr[i].equals("D")) {
-                list.add((int)Math.pow(Integer.parseInt(value), 2));
-                value = "";
+                int last = list.remove(list.size() - 1);
+                list.add((int)Math.pow(last, 2));
             }
             else if(sArr[i].equals("T")) {
-                list.add((int)Math.pow(Integer.parseInt(value), 3));
-                value = "";
+                int last = list.remove(list.size() - 1);
+                list.add((int)Math.pow(last, 3));
             }
             else if(sArr[i].equals("*")) {
-                int n = list.remove(list.size() - 1);
-                if(list.size() > 0){
-                    int m = list.remove(list.size() - 1);
-                    list.add(m * 2);
-                }
-                list.add(n * 2);
+                list = list.stream().map(e -> e * 2).collect(Collectors.toList());
             }
             else if(sArr[i].equals("#")) {
                 int last = list.remove(list.size() - 1);
