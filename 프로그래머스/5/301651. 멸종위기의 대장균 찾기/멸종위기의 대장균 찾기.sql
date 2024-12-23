@@ -1,40 +1,18 @@
 -- 코드를 작성해주세요
-SELECT count(*) as count,
-    CASE
-        WHEN P.ID IS NOT NULL THEN 16
-        WHEN O.ID IS NOT NULL THEN 15
-        WHEN N.ID IS NOT NULL THEN 14
-        WHEN M.ID IS NOT NULL THEN 13
-        WHEN L.ID IS NOT NULL THEN 12
-        WHEN K.ID IS NOT NULL THEN 11
-        WHEN J.ID IS NOT NULL THEN 10
-        WHEN I.ID IS NOT NULL THEN 9
-        WHEN H.ID IS NOT NULL THEN 8
-        WHEN G.ID IS NOT NULL THEN 7
-        WHEN F.ID IS NOT NULL THEN 6
-        WHEN E.ID IS NOT NULL THEN 5
-        WHEN D.ID IS NOT NULL THEN 4
-        WHEN C.ID IS NOT NULL THEN 3
-        WHEN B.ID IS NOT NULL THEN 2
-        ELSE 1
-    END as GENERATION
+with recursive gen as (
+    select id, parent_id, 1 as g
+    from ecoli_data
+    where parent_id is null
     
-FROM ECOLI_DATA AS A 
-LEFT JOIN ECOLI_DATA AS B ON A.ID = B.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS C ON B.ID = C.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS D ON C.ID = D.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS E ON D.ID = E.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS F ON E.ID = F.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS G ON F.ID = G.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS H ON G.ID = H.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS I ON H.ID = I.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS J ON I.ID = J.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS K ON J.ID = K.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS L ON K.ID = L.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS M ON L.ID = M.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS N ON M.ID = N.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS O ON N.ID = O.PARENT_ID 
-LEFT JOIN ECOLI_DATA AS P ON O.ID = P.PARENT_ID 
-where a.PARENT_ID is null
-GROUP BY GENERATION
-ORDER BY GENERATION
+    union all
+    
+    select e.id, e.parent_id, gen.g + 1 as g
+    from ecoli_data e
+    inner join gen on e.parent_id = gen.id
+)
+
+select count(*) as count, c.g as generation
+from ecoli_data a
+right join gen c on a.parent_id = c.id
+where a.id is null
+group by c.g
