@@ -14,7 +14,6 @@ class Solution {
             answer[idx] = -1;
             if(numbers[i + 1] > numbers[i]){
                 answer[idx] = numbers[i + 1];
-                idx--;
                 stack.push(numbers[i + 1]);
             } else{
                 while(!stack.isEmpty()){
@@ -24,8 +23,8 @@ class Solution {
                         break;
                     }else stack.pop();
                 }
-                idx--;
             }
+            idx--;
         }
         
         return answer;
