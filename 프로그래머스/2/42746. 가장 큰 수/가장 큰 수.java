@@ -5,7 +5,7 @@ class Solution {
     public String solution(int[] numbers) {
         String answer = "";
         
-        List<String> list = Arrays.stream(numbers).boxed().map(e -> String.valueOf(e)).collect(Collectors.toList());
+        List<String> list = Arrays.stream(numbers).mapToObj(String::valueOf).collect(Collectors.toList());
         
         Collections.sort(list, new Comparator<String>(){
             public int compare(String s1, String s2){
