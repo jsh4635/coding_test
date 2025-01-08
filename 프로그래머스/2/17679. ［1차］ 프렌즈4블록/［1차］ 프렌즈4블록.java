@@ -5,11 +5,12 @@ class Solution {
         char[][] cboard = new char[m][n];
         
         for(int i = 0; i < m; i++){
-            cboard[i] = board[m - 1 - i].toCharArray();
+            cboard[i] = board[i].toCharArray();
         }
         
         while(true){
             boolean check = true;
+            
             boolean[][] visited = new boolean[m][n];
             
             for(int i = 0; i < m - 1; i++){
@@ -20,19 +21,19 @@ class Solution {
                     char d = cboard[i + 1][j + 1];
                     if(a == '0' || b == '0' || c == '0' || d == '0') continue;
                     if(a == b && b == c && c == d){
-                        if(!visited[i][j]){
+                        if(!visited[i][j]) {
                             visited[i][j] = true;
                             answer++;
                         }
-                        if(!visited[i][j + 1]){
+                        if(!visited[i][j + 1]) {
                             visited[i][j + 1] = true;
                             answer++;
                         }
-                        if(!visited[i + 1][j]){
+                        if(!visited[i + 1][j]) {
                             visited[i + 1][j] = true;
                             answer++;
                         }
-                        if(!visited[i + 1][j + 1]){
+                        if(!visited[i + 1][j + 1]) {
                             visited[i + 1][j + 1] = true;
                             answer++;
                         }
@@ -43,16 +44,16 @@ class Solution {
             
             if(check) break;
             
-            for(int i = 0; i < m - 1; i++){
+            for(int i = m - 1; i > 0; i--){
                 for(int j = 0; j < n; j++){
                     if(visited[i][j]){
                         boolean none = true;
-                        for(int k = i + 1; k < m; k++){
+                        for(int k = i - 1; k >= 0; k--){
                             if(cboard[k][j] != '0' && !visited[k][j]){
                                 cboard[i][j] = cboard[k][j];
                                 cboard[k][j] = '0';
-                                none = false;
                                 visited[k][j] = true;
+                                none = false;
                                 break;
                             }
                         }
